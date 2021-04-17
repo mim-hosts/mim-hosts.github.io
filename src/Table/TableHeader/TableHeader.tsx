@@ -10,7 +10,11 @@ function TableHeader() {
                 <th scope="col" style={{ width: "155px" }}>Procesor</th>
                 <th scope="col" style={{ width: "90px" }}>Pamięć RAM</th>
                 <th scope="col" style={{ width: "320px" }}>Grafika</th>
-                <th scope="col" style={{ width: "500px" }}>Hosty</th>
+                <th scope="col" style={{ width: "500px"}}>
+                    <div style={{ paddingLeft: "14px" }}>
+                        Hosty
+                    </div>
+                </th>
             </tr>
         </thead>
     );
