@@ -1,4 +1,4 @@
-# [mim-hosts.github.io](mim-hosts.github.io)
+# [mim-hosts.github.io](https://mim-hosts.github.io)
 
 Currently up hosts in LK @ MIM UW
 
