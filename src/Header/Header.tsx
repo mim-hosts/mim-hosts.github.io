@@ -31,9 +31,7 @@ function Header() {
     );
 
     return (
-        <header>
-            <AppBar className={header}>{displayDesktop()}</AppBar>
-        </header>
+        <AppBar className={header}>{displayDesktop()}</AppBar>
     );
 }
 
