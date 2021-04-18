@@ -2,7 +2,7 @@
 
 Currently up hosts in LK @ MIM UW
 
-## Functions
+## Features
 
 - refreshes every 60 second
 - click to copy hostname of up computer

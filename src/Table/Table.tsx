@@ -98,20 +98,25 @@ const staticInfo: ComputerTypeInfo[] = [
     }
 ]
 
-export interface colorInfo {
-    [index: number]: boolean;
+export interface HostInfo {
+    up: boolean;
+    os?: string;
 }
 
-interface hostsInfo {
-    [color: string]: colorInfo;
+export interface ColorInfo {
+    [index: number]: HostInfo
+}
+
+interface HostsInfo {
+    [color: string]: ColorInfo;
 }
 
 function Table() {
-    const [hosts, setHosts] = useState<hostsInfo>();
+    const [hosts, setHosts] = useState<HostsInfo>();
 
     const getHosts = async () => {
         try {
-            axios.get<hostsInfo>('https://students.mimuw.edu.pl/~kr394714/mim-hosts/')
+            axios.get<HostsInfo>('https://students.mimuw.edu.pl/~kr394714/mim-hosts/')
                 .then(response => {
                     setHosts(response.data);
                 });
