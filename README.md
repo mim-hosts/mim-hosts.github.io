@@ -5,7 +5,7 @@ Currently up hosts in LK @ MIM UW
 ## Functions
 
 - refreshes every 60 second
-- click to copy up computer hostname
+- click to copy hostname of up computer
 
 ## API
 
