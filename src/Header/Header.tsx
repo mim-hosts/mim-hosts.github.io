@@ -1,5 +1,6 @@
 import {AppBar, Link, makeStyles, Toolbar, Typography} from "@material-ui/core";
-import React from "react";
+import React, {FunctionComponent} from "react";
+import {DarkModeSwitch} from "react-toggle-dark-mode";
 
 const useStyles = makeStyles(() => ({
     header: {
@@ -15,11 +16,35 @@ const useStyles = makeStyles(() => ({
     }
 }));
 
-function Header() {
+export interface HeaderProps {
+    isDark: boolean;
+    onChange: () => void;
+}
+
+const Header: FunctionComponent<HeaderProps> = ({
+    isDark,
+    onChange
+}) => {
     const { header, logo } = useStyles();
 
+    const toggle = (
+        <div style={{ paddingBottom: '2px' }}>
+            <DarkModeSwitch
+                sunColor="white"
+                checked={isDark}
+                onChange={onChange}
+                size={35}
+            />
+        </div>
+    )
+
     const displayDesktop = () => {
-        return <Toolbar>{appLogo}</Toolbar>;
+        return (
+            <Toolbar style={{ justifyContent: 'space-between' }}>
+                {appLogo}
+                {toggle}
+            </Toolbar>
+        );
     };
 
     const appLogo = (
