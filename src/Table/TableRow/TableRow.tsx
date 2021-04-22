@@ -2,6 +2,7 @@ import React, {FunctionComponent} from 'react';
 import './TableRow.css';
 import {ColorInfo, ComputerTypeInfo} from "../Table";
 import {Button} from "@material-ui/core";
+import { useSnackbar } from 'notistack';
 
 export interface TableRowProps {
     staticInfo: ComputerTypeInfo;
@@ -40,6 +41,8 @@ const TableRow: FunctionComponent<TableRowProps> = ({
     staticInfo,
     hosts
 }) => {
+    const { enqueueSnackbar } = useSnackbar();
+
     let hostsButtons;
     const darkColors = ['brown', 'white', 'blue'];
 
@@ -76,7 +79,12 @@ const TableRow: FunctionComponent<TableRowProps> = ({
                         color: darkColors.includes(staticInfo.codename.toLowerCase()) && entry.up ? "white" : undefined,
                         cursor: !entry.up ? 'initial' : undefined
                     }}
-                    onClick={entry.up ? () => {navigator.clipboard.writeText(hostname)} : undefined}
+                    onClick={entry.up ? () => {
+                        navigator.clipboard.writeText(hostname);
+                        enqueueSnackbar(`Hostname "${hostname}" copied to clipboard`, {
+                            variant: 'success',
+                        });
+                    } : undefined}
                 >
                     {hostname}
                     <div style={{ marginLeft: '4px', marginBottom: '-6px' }}>
