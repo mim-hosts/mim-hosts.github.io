@@ -154,6 +154,7 @@ const Table: FunctionComponent<TableProps> = ({
                             key={computerTypeInfo.codename.toLowerCase()}
                             staticInfo={computerTypeInfo}
                             hosts={computerTypeHosts}
+                            isDark={isDark}
                         />
                     )
                 })}

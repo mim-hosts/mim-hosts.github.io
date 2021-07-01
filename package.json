@@ -1,7 +1,7 @@
 {
   "name": "mim-hosts",
   "version": "0.1.0",
-  "homepage": "http://mim-hosts.github.io",
+  "homepage": "https://mim-hosts.github.io",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.11.3",

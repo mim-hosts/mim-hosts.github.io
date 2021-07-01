@@ -6,7 +6,8 @@ import { useSnackbar } from 'notistack';
 
 export interface TableRowProps {
     staticInfo: ComputerTypeInfo;
-    hosts?: ColorInfo
+    hosts?: ColorInfo;
+    isDark: boolean;
 }
 
 const windowsLogo = (invert?: boolean) => (
@@ -58,12 +59,13 @@ const TableRow: FunctionComponent<TableRowProps> = ({
         );
         hostsButtons = entries.map((entry) => {
             const hostname = `${staticInfo.codename.toLowerCase()}${entry.number}`;
+            const logoDarkColor = darkColors.includes(staticInfo.codename.toLowerCase()) && staticInfo.color !== "white";
             const osLogo = entry.up ? (
                 entry.os === 'windows'
-                    ? windowsLogo(darkColors.includes(staticInfo.codename.toLowerCase()))
+                    ? windowsLogo(logoDarkColor)
                     : staticInfo.codename.toLowerCase() === 'red'
-                    ? macosLinuxLogo(darkColors.includes(staticInfo.codename.toLowerCase()))
-                    : linuxLogo(darkColors.includes(staticInfo.codename.toLowerCase()))
+                    ? macosLinuxLogo(logoDarkColor)
+                    : linuxLogo(logoDarkColor)
             ) : <div style={{ width: '26px' }} />;
             return (
                 <Button
@@ -76,7 +78,9 @@ const TableRow: FunctionComponent<TableRowProps> = ({
                         margin: "2px",
                         fontFamily: "Titillium Web, sans-serif",
                         fontWeight: 600,
-                        color: darkColors.includes(staticInfo.codename.toLowerCase()) && entry.up ? "white" : undefined,
+                        color: darkColors.includes(
+                            staticInfo.codename.toLowerCase()
+                        ) && entry.up && staticInfo.color !== "white" ? "white" : undefined,
                         cursor: !entry.up ? 'initial' : undefined
                     }}
                     onClick={entry.up ? () => {
