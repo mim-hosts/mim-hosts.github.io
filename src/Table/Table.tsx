@@ -3,6 +3,7 @@ import TableHeader from "./TableHeader/TableHeader";
 import './Table.css';
 import TableRow from "./TableRow/TableRow";
 import axios from "axios";
+import {useEffectOnce} from "react-use";
 
 export interface ComputerTypeInfo {
     codename: string,
@@ -130,6 +131,18 @@ const Table: FunctionComponent<TableProps> = ({
             console.error(err.message);
         }
     };
+
+    const logVisit = async () => {
+        try {
+            await axios.get('https://students.mimuw.edu.pl/~kr394714/mim-hosts/visits/');
+        } catch (err) {
+            console.error(err.message);
+        }
+    };
+
+    useEffectOnce(() => {
+        logVisit();
+    });
 
     useEffect(()=>{
         getHosts();
