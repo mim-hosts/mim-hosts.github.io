@@ -3,7 +3,7 @@ import TableHeader from "./TableHeader/TableHeader";
 import styles from './Table.module.scss';
 import TableRow from "./TableRow/TableRow";
 import axios from "axios";
-//import {useEffectOnce} from "react-use";
+import {useEffectOnce} from "react-use";
 import {ClassInfo, STATIC_INFO} from "./commons";
 
 const REFRESH_INTERVAL_SECONDS = 60;
@@ -57,7 +57,6 @@ const Table: FunctionComponent<TableProps> = ({
         }
     };
 
-    /*
     const logVisit = async () => {
         try {
             await axios.get('https://students.mimuw.edu.pl/~kr394714/mim-hosts/visits/');
@@ -69,7 +68,6 @@ const Table: FunctionComponent<TableProps> = ({
     useEffectOnce(() => {
         logVisit();
     });
-     */
 
     useEffect(() => {
         getHosts().then();
