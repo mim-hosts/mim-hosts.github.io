@@ -1,31 +1,32 @@
 import React, {FunctionComponent} from 'react';
-import './TableRow.css';
-import {ColorInfo, ComputerTypeInfo} from "../Table";
-import {Button} from "@material-ui/core";
-import { useSnackbar } from 'notistack';
+import {ColorInfo} from "../Table";
+import Classes from "../Classes/Classes";
+import styles from './TableRow.module.scss';
+import HostButton from "../HostButton/HostButton";
+import {ClassInfo, ComputerTypeInfo, DARK_COLORS} from "../commons";
 
 export interface TableRowProps {
     staticInfo: ComputerTypeInfo;
     hosts?: ColorInfo;
-    isDark: boolean;
+    classes?: ClassInfo[]
 }
 
 const windowsLogo = (invert?: boolean) => (
     <img width='20px' style={{
         filter: invert ? 'invert(100%)' : undefined,
-        marginLeft: '6px'
+        marginBottom: '-5px'
     }} src={process.env.PUBLIC_URL + '/windows.svg'} alt='windows'/>
 );
 
 const linuxLogo = (invert?: boolean) => (
     <img width='20px' style={{
         filter: invert ? 'invert(100%)' : undefined,
-        marginLeft: '6px'
+        marginBottom: '-5px'
     }} src={process.env.PUBLIC_URL + '/linux.svg'} alt='linux'/>
 );
 
 const macosLinuxLogo = (invert?: boolean) => (
-    <div style={{ marginRight: '-12px', marginBottom: '6px' }}>
+    <div style={{ marginBottom: '6px' }}>
         <img width='16px' style={{
             filter: invert ? 'invert(100%)' : undefined,
             marginBottom: '-2px'
@@ -38,17 +39,21 @@ const macosLinuxLogo = (invert?: boolean) => (
     </div>
 );
 
+export interface Entry {
+    number: string;
+    up: boolean;
+    os: string;
+}
+
 const TableRow: FunctionComponent<TableRowProps> = ({
     staticInfo,
-    hosts
+    hosts,
+    classes
 }) => {
-    const { enqueueSnackbar } = useSnackbar();
-
     let hostsButtons;
-    const darkColors = ['brown', 'white', 'blue'];
 
     if (hosts) {
-        const entries = Object.entries(hosts).map((entry) => (
+        const entries: Entry[] = Object.entries(hosts).map((entry) => (
             {
                 number: entry[0],
                 up: Boolean(entry[1].up),
@@ -59,7 +64,7 @@ const TableRow: FunctionComponent<TableRowProps> = ({
         );
         hostsButtons = entries.map((entry) => {
             const hostname = `${staticInfo.codename.toLowerCase()}${entry.number}`;
-            const logoDarkColor = darkColors.includes(staticInfo.codename.toLowerCase()) && staticInfo.color !== "white";
+            const logoDarkColor = DARK_COLORS.includes(staticInfo.codename.toLowerCase()) && staticInfo.color !== "white";
             const osLogo = entry.up ? (
                 entry.os === 'windows'
                     ? windowsLogo(logoDarkColor)
@@ -68,33 +73,13 @@ const TableRow: FunctionComponent<TableRowProps> = ({
                     : linuxLogo(logoDarkColor)
             ) : <div style={{ width: '26px' }} />;
             return (
-                <Button
+                <HostButton
                     key={hostname}
-                    variant="contained"
-                    style={{
-                        backgroundColor: entry.up ? staticInfo.color : undefined,
-                        textTransform: "none",
-                        width: "112px",
-                        margin: "2px",
-                        fontFamily: "Titillium Web, sans-serif",
-                        fontWeight: 600,
-                        color: darkColors.includes(
-                            staticInfo.codename.toLowerCase()
-                        ) && entry.up && staticInfo.color !== "white" ? "white" : undefined,
-                        cursor: !entry.up ? 'initial' : undefined
-                    }}
-                    onClick={entry.up ? () => {
-                        navigator.clipboard.writeText(hostname);
-                        enqueueSnackbar(`Hostname "${hostname}" copied to clipboard`, {
-                            variant: 'success',
-                        });
-                    } : undefined}
-                >
-                    {hostname}
-                    <div style={{ marginLeft: '4px', marginBottom: '-6px' }}>
-                        {osLogo}
-                    </div>
-                </Button>
+                    hostname={hostname}
+                    entry={entry}
+                    staticInfo={staticInfo}
+                    osLogo={osLogo}
+                />
             )
         })
     } else {
@@ -102,14 +87,23 @@ const TableRow: FunctionComponent<TableRowProps> = ({
     }
 
     return (
-        <tr>
+        <tr className={styles.tableRow}>
+            <td>{staticInfo.room}</td>
             <td style={{ color: staticInfo.color }}>{staticInfo.codename}</td>
             <td>{staticInfo.type}</td>
             <td>{staticInfo.processor}</td>
             <td>{staticInfo.memory}</td>
             <td>{staticInfo.graphics}</td>
             <td>
-                <div style={{ paddingLeft: "12px" }}>
+                <div className={styles.classes}>
+                    <Classes
+                        staticInfo={staticInfo}
+                        classes={classes}
+                    />
+                </div>
+            </td>
+            <td>
+                <div className={styles.hostsButtons}>
                     {hostsButtons}
                 </div>
             </td>

@@ -1,18 +1,10 @@
 import React, {FunctionComponent, useEffect, useState} from 'react';
 import TableHeader from "./TableHeader/TableHeader";
-import './Table.css';
+import styles from './Table.module.scss';
 import TableRow from "./TableRow/TableRow";
 import axios from "axios";
-import {useEffectOnce} from "react-use";
-
-export interface ComputerTypeInfo {
-    codename: string,
-    type: string,
-    processor: string,
-    memory: string,
-    graphics: string,
-    color: string
-}
+//import {useEffectOnce} from "react-use";
+import {ClassInfo, STATIC_INFO} from "./commons";
 
 const REFRESH_INTERVAL_SECONDS = 60;
 
@@ -29,6 +21,10 @@ interface HostsInfo {
     [color: string]: ColorInfo;
 }
 
+interface RoomsInfo {
+    [room: number]: ClassInfo[];
+}
+
 export interface TableProps {
     isDark: boolean;
 }
@@ -36,90 +32,8 @@ export interface TableProps {
 const Table: FunctionComponent<TableProps> = ({
     isDark
 }) => {
-    const staticInfo: ComputerTypeInfo[] = [
-        {
-            codename: "Red",
-            type: "Apple iMac Late 2013",
-            processor: "Intel Core i5-4570",
-            memory: "8GB",
-            graphics: "nVidia GeForce GT755M Mac Edition [GK107M]",
-            color: "red"
-        },
-        {
-            codename: "Pink",
-            type: "Dell Precision Tower 3620",
-            processor: "Intel Xeon E3-1240 v6",
-            memory: "16GB",
-            graphics: "nVidia Quadro P400 [GP107GL]",
-            color: "rgb(255, 102, 255)"
-        },
-        {
-            codename: "Orange",
-            type: "Dell Precision Tower 3620",
-            processor: "Intel Xeon E3-1240 v6",
-            memory: "16GB",
-            graphics: "nVidia Quadro P400 [GP107GL]",
-            color: "orange"
-        },
-        {
-            codename: "Brown",
-            type: "Dell Precision Tower 3620",
-            processor: "Intel Xeon E3-1240 v6",
-            memory: "16GB",
-            graphics: "nVidia Quadro P400 [GP107GL]",
-            color: "brown"
-        },
-        {
-            codename: "Green",
-            type: "Dell Precision Tower 1700",
-            processor: "Intel Xeon E3-1220 v3",
-            memory: "8GB",
-            graphics: "nVidia NVS 315 [GF119]",
-            color: "green"
-        },
-        {
-            codename: "Khaki",
-            type: "Dell Precision Tower 3630",
-            processor: "Intel Core i5-8500",
-            memory: "16GB",
-            graphics: "nVidia Quadro P400 [GP107GL]",
-            color: "rgb(173, 169, 110)"
-        },
-        {
-            codename: "White",
-            type: "Dell Precision Tower 3630",
-            processor: "Intel Core i5-8500",
-            memory: "16GB",
-            graphics: "nVidia Quadro P400 [GP107GL]",
-            color: isDark ? "white" : "#212529"
-        },
-        {
-            codename: "Cyan",
-            type: "Dell Precision Tower 3630",
-            processor: "Intel Core i5-8500",
-            memory: "16GB",
-            graphics: "nVidia Quadro P400 [GP107GL]",
-            color: "cyan"
-        },
-        {
-            codename: "Blue",
-            type: "Dell Precision Tower 3630",
-            processor: "Intel Core i5-8500",
-            memory: "16GB",
-            graphics: "nVidia Quadro P400 [GP107GL]",
-            color: "blue"
-        },
-        {
-            codename: "Violet",
-            type: "Dell Precision Tower 3630",
-            processor: "Intel Core i5-8500",
-            memory: "16GB",
-            graphics: "nVidia Quadro P400 [GP107GL]",
-            color: "violet"
-        }
-    ]
-
     const [hosts, setHosts] = useState<HostsInfo>();
+    const [rooms, setRooms] = useState<RoomsInfo>();
 
     const getHosts = async () => {
         try {
@@ -132,6 +46,18 @@ const Table: FunctionComponent<TableProps> = ({
         }
     };
 
+    const getClasses = async () => {
+        try {
+            axios.get<RoomsInfo>('https://students.mimuw.edu.pl/~kr394714/mim-hosts/rooms/')
+                .then(response => {
+                    setRooms(response.data);
+                });
+        } catch (err) {
+            console.error(err.message);
+        }
+    };
+
+    /*
     const logVisit = async () => {
         try {
             await axios.get('https://students.mimuw.edu.pl/~kr394714/mim-hosts/visits/');
@@ -143,31 +69,32 @@ const Table: FunctionComponent<TableProps> = ({
     useEffectOnce(() => {
         logVisit();
     });
+     */
 
-    useEffect(()=>{
-        getHosts();
-        const interval = setInterval(()=>{
-            getHosts()
+    useEffect(() => {
+        getHosts().then();
+        getClasses().then();
+        const interval = setInterval(() => {
+            getHosts().then();
+            getClasses().then();
         },REFRESH_INTERVAL_SECONDS * 1000);
         return () => clearInterval(interval)
-    },[])
+    },[]);
 
     return (
-        <div className="table-responsive">
-            <table className="table-bordered">
+        <div className={styles.tableResponsive}>
+            <table className={styles.tableBordered}>
                 <TableHeader />
                 <tbody>
-                {staticInfo.map((computerTypeInfo) => {
-                    let computerTypeHosts = undefined;
-                    if (hosts) {
-                        computerTypeHosts = hosts[computerTypeInfo.codename.toLowerCase()];
-                    }
+                {STATIC_INFO(isDark).map((computerTypeInfo) => {
+                    const computerTypeHosts = hosts ? hosts[computerTypeInfo.codename.toLowerCase()] : undefined;
+                    const classes = rooms ? rooms[computerTypeInfo.room] : undefined;
                     return (
                         <TableRow
                             key={computerTypeInfo.codename.toLowerCase()}
                             staticInfo={computerTypeInfo}
                             hosts={computerTypeHosts}
-                            isDark={isDark}
+                            classes={classes}
                         />
                     )
                 })}

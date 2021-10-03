@@ -1,17 +1,19 @@
 import React from 'react';
-import './TableHeader.css';
+import styles from './TableHeader.module.scss';
 
 function TableHeader() {
     return (
-        <thead className="thead-dark">
+        <thead className={styles.theadDark}>
             <tr>
-                <th scope="col" style={{ width: "105px" }}>Nazwa kodowa</th>
-                <th scope="col" style={{ width: "175px" }}>Typ komputera</th>
-                <th scope="col" style={{ width: "155px" }}>Procesor</th>
-                <th scope="col" style={{ width: "90px" }}>Pamięć RAM</th>
-                <th scope="col" style={{ width: "320px" }}>Grafika</th>
-                <th scope="col" style={{ width: "500px"}}>
-                    <div style={{ paddingLeft: "14px" }}>
+                <th scope="col" style={{ width: "30px" }}>Sala</th>
+                <th scope="col" style={{ width: "30px" }}>Nazwa</th>
+                <th scope="col" style={{ width: "200px" }}>Typ komputera</th>
+                <th scope="col" style={{ width: "170px" }}>Procesor</th>
+                <th scope="col" style={{ width: "30px" }}>RAM</th>
+                <th scope="col" style={{ width: "150px" }}>Grafika</th>
+                <th scope="col" style={{ width: "200px" }}>Zajęcia</th>
+                <th scope="col" style={{ width: "340px"}}>
+                    <div style={{ paddingLeft: "6px" }}>
                         Hosty
                     </div>
                 </th>
