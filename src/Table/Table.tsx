@@ -66,7 +66,7 @@ const Table: FunctionComponent<TableProps> = ({
     };
 
     useEffectOnce(() => {
-        logVisit();
+        logVisit().then();
     });
 
     useEffect(() => {
