@@ -143,4 +143,4 @@ export const classesTimetable: ClassInfo[] = [
     }
 ];
 
-export const DARK_COLORS = ['brown', 'white', 'blue'];
+export const DARK_COLORS = ['brown', 'white', 'blue', 'red', 'green'];
