@@ -1,9 +1,10 @@
-import React, {FunctionComponent} from 'react';
+import React, {FunctionComponent, useState} from 'react';
 import {ColorInfo} from "../Table";
 import Classes from "../Classes/Classes";
 import styles from './TableRow.module.scss';
 import HostButton from "../HostButton/HostButton";
 import {ClassInfo, ComputerTypeInfo, DARK_COLORS} from "../commons";
+import cx from 'classnames';
 
 export interface TableRowProps {
     staticInfo: ComputerTypeInfo;
@@ -50,6 +51,8 @@ const TableRow: FunctionComponent<TableRowProps> = ({
     hosts,
     classes
 }) => {
+    const [afterClasses, setAfterClasses] = useState<boolean>(false);
+
     let hostsButtons;
 
     if (hosts) {
@@ -99,13 +102,23 @@ const TableRow: FunctionComponent<TableRowProps> = ({
                     <Classes
                         staticInfo={staticInfo}
                         classes={classes}
+                        onAfterClasses={(isAfter => {
+                            setAfterClasses(isAfter);
+                        })}
                     />
                 </div>
             </td>
             <td>
-                <div className={styles.hostsButtons}>
-                    {hostsButtons}
-                </div>
+                {typeof hostsButtons === 'string'
+                    ? (hostsButtons)
+                    : (
+                        <div className={cx(styles.hostsButtons, {
+                            [styles.hostsButtonsDuringClasses]: !afterClasses
+                        })}>
+                            {hostsButtons}
+                        </div>
+                    )
+                }
             </td>
         </tr>
     );

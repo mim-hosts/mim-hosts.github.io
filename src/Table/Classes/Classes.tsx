@@ -21,7 +21,12 @@ const StyledTooltip = withStyles({
     }
 })(Tooltip);
 
-const getButtons = (currentTime: string, staticInfo: ComputerTypeInfo, classes?: ClassInfo[]) => {
+const getButtons = (
+    currentTime: string,
+    staticInfo: ComputerTypeInfo,
+    onAfterClasses: (isAfter: boolean) => void,
+    classes?: ClassInfo[]
+) => {
     let classesButtons;
     if (classes) {
         const timetable = [...classesTimetable];
@@ -84,7 +89,9 @@ const getButtons = (currentTime: string, staticInfo: ComputerTypeInfo, classes?:
                     }
                 </div>
             )
-        })
+        });
+
+        onAfterClasses(classesButtons.length === 0);
 
         if (classesButtons.length === 0) {
             classesButtons = AFTER_CLASSES;
@@ -97,12 +104,14 @@ const getButtons = (currentTime: string, staticInfo: ComputerTypeInfo, classes?:
 
 export interface ClassesProps {
     staticInfo: ComputerTypeInfo;
-    classes?: ClassInfo[]
+    classes?: ClassInfo[];
+    onAfterClasses: (isAfter: boolean) => void;
 }
 
 const Classes: FunctionComponent<ClassesProps> = ({
     staticInfo,
-    classes
+    classes,
+    onAfterClasses
 }) => {
     const [currentTime, setCurrentTime] = useState<string>(getCurrentTime());
     const [classesButtons, setClassesButtons] = useState<string | JSX.Element[]>('Loading...');
@@ -115,8 +124,8 @@ const Classes: FunctionComponent<ClassesProps> = ({
     });
 
     useEffect(() => {
-        setClassesButtons(getButtons(currentTime, staticInfo, classes));
-    }, [currentTime, staticInfo, classes]);
+        setClassesButtons(getButtons(currentTime, staticInfo, onAfterClasses, classes));
+    }, [currentTime, staticInfo, classes, onAfterClasses]);
 
     return (
         <>
