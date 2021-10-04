@@ -69,23 +69,10 @@ const getButtons = (
                                 key={`${entry.start}${entry.end}${entry.title}`}
                                 title={entry.title}
                             >
-                                <ClassButton
-                                    ongoing={ongoing}
-                                    entry={entry}
-                                    staticInfo={staticInfo}
-                                    title={title}
-                                />
+                                {ClassButton(ongoing, entry, staticInfo, title)}
                             </StyledTooltip>
                         )
-                        : (
-                            <ClassButton
-                                key={`${entry.start}${entry.end}${entry.title}`}
-                                ongoing={ongoing}
-                                entry={entry}
-                                staticInfo={staticInfo}
-                                title={title}
-                            />
-                        )
+                        : ClassButton(ongoing, entry, staticInfo, title, `${entry.start}${entry.end}${entry.title}`)
                     }
                 </div>
             )

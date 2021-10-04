@@ -1,22 +1,17 @@
-import React, {FunctionComponent} from 'react';
+import React from 'react';
 import {Button} from "@material-ui/core";
 import {ClassInfo, ComputerTypeInfo, DARK_COLORS, NO_CLASS} from "../commons";
 import styles from './ClassButton.module.scss';
 
-export interface ClassButtonProps {
-    ongoing: boolean;
-    entry: ClassInfo;
-    staticInfo: ComputerTypeInfo;
-    title: string;
-}
-
-const ClassButton: FunctionComponent<ClassButtonProps> = ({
-    ongoing,
-    entry,
-    staticInfo,
-    title
-}) => (
+const ClassButton = (
+    ongoing: boolean,
+    entry: ClassInfo,
+    staticInfo: ComputerTypeInfo,
+    classTitle: string,
+    key?: string
+) => (
     <Button
+        key={key}
         variant="contained"
         disableRipple
         disableElevation
@@ -32,7 +27,7 @@ const ClassButton: FunctionComponent<ClassButtonProps> = ({
                 : undefined,
         }}
     >
-        {title}
+        {classTitle}
     </Button>
 )
 

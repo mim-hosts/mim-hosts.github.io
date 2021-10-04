@@ -28,10 +28,12 @@ const HostButton: FunctionComponent<HostButtonProps> = ({
             disableElevation
             className={styles.hostButton}
             style={{
-                backgroundColor: entry.up ? staticInfo.color : '#e0e0e0',
-                color: DARK_COLORS.includes(
-                    staticInfo.codename.toLowerCase()
-                ) && entry.up && staticInfo.color !== "white" ? "white" : undefined,
+                backgroundColor: entry.up ? staticInfo.color : '#7a7a7a',
+                color: !entry.up || (
+                            DARK_COLORS.includes(staticInfo.codename.toLowerCase())
+                            && entry.up && staticInfo.color !== "white"
+                    ) ? "white"
+                    : undefined,
                 cursor: !entry.up ? 'initial' : undefined
             }}
             onClick={entry.up ? () => {
