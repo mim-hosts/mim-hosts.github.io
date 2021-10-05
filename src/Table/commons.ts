@@ -110,37 +110,4 @@ export interface ClassInfo {
 export const NO_CLASS = 'brak zajęć';
 export const AFTER_CLASSES = 'Zajęcia skończyły się';
 
-export const classesTimetable: ClassInfo[] = [
-    {
-        start: '8:30',
-        end: '10:00',
-        title: NO_CLASS
-    },
-    {
-        start: '10:15',
-        end: '12:00',
-        title: NO_CLASS
-    },
-    {
-        start: '12:15',
-        end: '14:00',
-        title: NO_CLASS
-    },
-    {
-        start: '14:15',
-        end: '16:00',
-        title: NO_CLASS
-    },
-    {
-        start: '16:15',
-        end: '18:00',
-        title: NO_CLASS
-    },
-    {
-        start: '18:15',
-        end: '20:00',
-        title: NO_CLASS
-    }
-];
-
 export const DARK_COLORS = ['brown', 'white', 'blue', 'red', 'green'];

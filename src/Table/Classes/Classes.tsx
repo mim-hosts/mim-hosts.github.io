@@ -1,6 +1,6 @@
 import React, {FunctionComponent, useEffect, useState} from 'react';
 import {Tooltip, withStyles} from "@material-ui/core";
-import {AFTER_CLASSES, classesTimetable, ClassInfo, ComputerTypeInfo, NO_CLASS} from "../commons";
+import {AFTER_CLASSES, ClassInfo, ComputerTypeInfo, NO_CLASS} from "../commons";
 import ClassButton from "../ClassButton/ClassButton";
 
 const REFRESH_INTERVAL_SECONDS = 15;
@@ -11,7 +11,7 @@ const getCurrentTime = () => {
     return String(currentDate.getHours()).padStart(2, '0')
         + ":"
         + String(currentDate.getMinutes()).padStart(2, '0');
-}
+};
 
 const StyledTooltip = withStyles({
     tooltip: {
@@ -29,22 +29,34 @@ const getButtons = (
 ) => {
     let classesButtons;
     if (classes) {
-        const timetable = [...classesTimetable];
+        classes.unshift({
+            start: '00:00',
+            end: '08:30',
+            title: NO_CLASS
+        });
 
-        classes.forEach((singleClass) => {
-            const idx = classesTimetable.findIndex((elt) => elt.start === singleClass.start);
-            timetable[idx] = singleClass;
-        })
+        for (let i = classes.length - 2; i >= 0; --i) {
+            const firstEnd = classes[i].end.split(':').map(Number);
+            const firstEndTime = new Date().setHours(firstEnd[0], firstEnd[1]);
+            const secondStart = classes[i + 1].start.split(':').map(Number);
+            const secondStartTime = new Date().setHours(secondStart[0], secondStart[1]);
+            const diff = (secondStartTime - firstEndTime) / 1000;
+            if (diff > 30) {
+                classes.splice(i + 1, 0, {
+                    start: classes[i].end,
+                    end: classes[i + 1].start,
+                    title: NO_CLASS
+                });
+            }
+        }
 
-        const entries = timetable.filter((entry) =>
-            entry.end > currentTime
-        ).sort((a,b) =>
+        classes.shift();
+
+        const entries = classes.filter((entry) => {
+            return entry.end > currentTime;
+        }).sort((a,b) =>
             (a.start > b.start) ? 1 : ((b.start > a.start) ? -1 : 0)
         );
-
-        while (entries.length > 0 && entries[entries.length - 1].title === NO_CLASS) {
-            entries.pop();
-        }
 
         entries.splice(2);
 
