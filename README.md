@@ -1,10 +1,10 @@
 # [mim-hosts.github.io](https://mim-hosts.github.io)
 
-Currently up hosts in LK @ MIM UW
+Currently up hosts and ongoing classes in LK @ MIM UW
 
 ## Features
 
-- refreshes every 60 second
+- refreshes data every 15 second
 - click to copy hostname of up computer
 
 ## API

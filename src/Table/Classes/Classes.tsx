@@ -3,7 +3,7 @@ import {Tooltip, withStyles} from "@material-ui/core";
 import {AFTER_CLASSES, ClassInfo, ComputerTypeInfo, NO_CLASS} from "../commons";
 import ClassButton from "../ClassButton/ClassButton";
 
-const REFRESH_INTERVAL_SECONDS = 15;
+const REFRESH_INTERVAL_SECONDS = 5;
 const TITLE_MAX_LEN = 56;
 
 const getCurrentTime = () => {

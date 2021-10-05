@@ -6,7 +6,7 @@ import axios from "axios";
 import {useEffectOnce} from "react-use";
 import {ClassInfo, STATIC_INFO} from "./commons";
 
-const REFRESH_INTERVAL_SECONDS = 60;
+const REFRESH_INTERVAL_SECONDS = 15;
 
 export interface HostInfo {
     up: boolean;
