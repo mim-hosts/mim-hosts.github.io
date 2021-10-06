@@ -37,10 +37,10 @@ const getButtons = (
 
         for (let i = classes.length - 2; i >= 0; --i) {
             const firstEnd = classes[i].end.split(':').map(Number);
-            const firstEndTime = new Date().setHours(firstEnd[0], firstEnd[1]);
+            const firstEndTime = new Date().setHours(firstEnd[0], firstEnd[1], 0, 0);
             const secondStart = classes[i + 1].start.split(':').map(Number);
-            const secondStartTime = new Date().setHours(secondStart[0], secondStart[1]);
-            const diff = (secondStartTime - firstEndTime) / 1000;
+            const secondStartTime = new Date().setHours(secondStart[0], secondStart[1], 0, 0);
+            const diff = (secondStartTime - firstEndTime) / (1000 * 60);
             if (diff > 30) {
                 classes.splice(i + 1, 0, {
                     start: classes[i].end,
