@@ -16,7 +16,7 @@ export interface ColorInfo {
     [index: number]: HostInfo
 }
 
-interface HostsInfo {
+export interface HostsInfo {
     [color: string]: ColorInfo;
 }
 
@@ -69,7 +69,9 @@ const Table: FunctionComponent<TableProps> = ({
     return (
         <div className={styles.tableResponsive}>
             <table className={styles.tableBordered}>
-                <TableHeader />
+                <TableHeader
+                    hosts={hosts}
+                />
                 <tbody>
                 {STATIC_INFO(isDark).map((computerTypeInfo) => {
                     const computerTypeHosts = hosts ? hosts[computerTypeInfo.codename.toLowerCase()] : undefined;
