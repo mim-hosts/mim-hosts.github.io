@@ -6,17 +6,25 @@ export interface TableHeaderProps {
     hosts?: HostsInfo;
 }
 
+interface OsInfo {
+    [os: string]: number;
+}
+
+const formatOs = (os: string) => {
+    const capitalized = os.charAt(0).toUpperCase() + os.slice(1);
+    return capitalized.replace('os', 'OS');
+}
+
 const TableHeader: FunctionComponent<TableHeaderProps> = ({
     hosts = {}
 }) => {
-    const numAllHosts = Object.values(hosts)
-        .map(colorInfo => Object.keys(colorInfo).length)
-        .reduce((a, b) => a + b, 0);
-    const numUpHosts = Object.values(hosts)
-        .map(colorInfo => Object.values(colorInfo))
-        .map(hosts => hosts.map(host => (host as unknown as HostInfo).up))
-        .map(hosts => hosts.reduce((a, b) => a + Number(b), 0))
-        .reduce((a, b) => a + b, 0);
+    const allHosts: HostInfo[] = Object.values(hosts)
+        .flatMap(colorInfo => Object.values(colorInfo));
+    const upByOsMap = allHosts
+        .filter(host => host.up)
+        .map(host => host.os)
+        .reduce((res, os) => res.set(os, (res.get(os) || 0) + 1), new Map());
+    const upByOs: OsInfo = Object.fromEntries(upByOsMap);
     return (
         <thead className={styles.theadDark}>
             <tr>
@@ -29,7 +37,12 @@ const TableHeader: FunctionComponent<TableHeaderProps> = ({
                 <th scope="col" style={{ width: "200px" }}>Zajęcia</th>
                 <th scope="col" style={{ width: "340px"}}>
                     <div style={{ paddingLeft: "6px" }}>
-                        {`Hosty${numAllHosts ? ` (${numUpHosts} up, ${numAllHosts} wszystkich)` : ''}`}
+                        {`Hosty${allHosts.length ? ` (${
+                            Object.keys(upByOs)
+                                .sort()
+                                .map(os => `${formatOs(os)} - ${upByOs[os]}`)
+                                .join(', ')
+                        })` : ''}`}
                     </div>
                 </th>
             </tr>
